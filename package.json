@@ -1,0 +1,29 @@
+{
+  "name": "node-big-cache",
+  "version": "0.0.1",
+  "description": "File based cache for large data. Data is stored in different files with different keys in a single folder.",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "node-sanitize-options": "^0.0.4",
+    "random-key": "^0.3.2",
+    "node-file-json": "^0.0.8"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "url": "https://github.com/animatedcreativity/node-big-cache"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "big",
+    "large",
+    "cache",
+    "file",
+    "folder"
+  ]
+}
