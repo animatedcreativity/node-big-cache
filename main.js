@@ -5,7 +5,8 @@ module.exports = exports = function(config) {
   var fs = require("fs");
   config = sanitize.options(config, {
     folder: "node-big-cache",
-    jsonFile: "node-big-cache-json"
+    jsonFile: "node-big-cache-json",
+    cacheTime: 3600000 // milliseconds, default 1 hour
   });
   var json = new fileJson();
   json.load(config.jsonFile + ".json");
@@ -21,24 +22,32 @@ module.exports = exports = function(config) {
         console.log("Key is not provided.");
         return false;
       }
-      if (typeof json.data[key] !== "undefined") {
-        var file = config.folder + "/" + json.data[key];
-        if (fs.existsSync(file) === true) {
-          return fs.readFileSync(file, "utf-8");
+      if (typeof json.data[key] !== "undefined" && typeof json.data[key] === "object" && json.data[key] !== null) {
+        if (Date.now() - json.data[key].timestamp < json.data[key].cacheTime) {
+          var file = config.folder + "/" + json.data[key].file;
+          if (fs.existsSync(file) === true) {
+            return fs.readFileSync(file, "utf-8");
+          }
+        } else {
+          cache.remove(key);
         }
       }
     },
-    set: function(key, data) {
+    set: function(key, data, cacheTime) {
       if (typeof key === "undefined" || !key) {
         console.log("Key is not provided.");
         return false;
       }
+      if (typeof cacheTime === "undefined") cacheTime = config.cacheTime;
       if (typeof json.data[key] === "undefined" || !json.data[key]) {
-        json.data[key] = random.generate(32) + ".txt";
+        json.data[key] = {file: random.generate(32) + ".txt", timestamp: Date.now(), cacheTime: cacheTime};
         json.save();
       }
-      if (typeof json.data[key] !== "undefined") {
-        var file = config.folder + "/" + json.data[key];
+      if (typeof json.data[key] !== "undefined" && typeof json.data[key] === "object" && json.data[key] !== null) {
+        json.data[key].timestamp = Date.now();
+        json.data[key].cacheTime = cacheTime;
+        json.save();
+        var file = config.folder + "/" + json.data[key].file;
         fs.writeFileSync(file, data, "utf-8");
       }
     },
@@ -47,8 +56,8 @@ module.exports = exports = function(config) {
         console.log("Key is not provided.");
         return false;
       }
-      if (typeof json.data[key] !== "undefined") {
-        var file = config.folder + "/" + json.data[key];
+      if (typeof json.data[key] !== "undefined" && typeof json.data[key] === "object" && json.data[key] !== null) {
+        var file = config.folder + "/" + json.data[key].file;
         if (fs.existsSync(file) === true) {
           fs.unlinkSync(file);
         }

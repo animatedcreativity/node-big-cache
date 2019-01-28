@@ -14,7 +14,8 @@ config:
 ```
 {
   folder: "node-big-cache",
-  jsonFile: "node-big-cache-json"
+  jsonFile: "node-big-cache-json",
+  cacheTime: 3600000 // milliseconds, default 1 hour
 }
 ```
 - folder: location of cache files. File name is created using a random key and extension is `.txt`. File key/name is always random and different than data key.
@@ -27,10 +28,11 @@ config:
 ```
 var bigCache = require("node-big-cache");
 var cache = new bigCache(config);
-cache.set("my_special_key", "This is some long data.");
+var cacheTime = 60000; // milliseconds, 60 seconds
+cache.set("my_special_key", "This is some long data.", cacheTime);
 ```
 
-Sets data for a key. Data is saved in utf-8 format and can be extremely long.
+Sets data for a key. Data is saved in utf-8 format and can be extremely long. If no cache time provided then default is used.
 
 **Example (get):**
 
@@ -41,7 +43,7 @@ var data = cache.get("my_special_key");
 console.log(data);
 ```
 
-Gets data for a key. Data is read in utf-8 format.
+Gets data for a key until it expires. Data is read in utf-8 format.
 
 **Example (list):**
 
