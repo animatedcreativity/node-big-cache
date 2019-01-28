@@ -43,6 +43,10 @@ module.exports = exports = function(config) {
       }
     },
     remove: function(key) {
+      if (typeof key === "undefined" || !key) {
+        console.log("Key is not provided.");
+        return false;
+      }
       if (typeof json.data[key] !== "undefined") {
         var file = config.folder + "/" + json.data[key];
         if (fs.existsSync(file) === true) {
