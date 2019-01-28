@@ -9,7 +9,7 @@ module.exports = exports = function(config) {
     cacheTime: 3600000 // milliseconds, default 1 hour
   });
   var json = new fileJson();
-  json.load(config.jsonFile + ".json");
+  json.load(config.jsonFile + (config.jsonFile.split(".json").length <= 1 ? ".json" : ""));
   if (fs.existsSync(config.folder) === false) {
     fs.mkdirSync(config.folder);
   }

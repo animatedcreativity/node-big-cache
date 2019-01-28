@@ -1,6 +1,6 @@
 {
   "name": "node-big-cache",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "File based cache for large data. Data is stored in different files with different keys in a single folder.",
   "main": "main.js",
   "scripts": {
